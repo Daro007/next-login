@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { DefaultTemplateString } from "next/dist/lib/metadata/types/metadata-types";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 

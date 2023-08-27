@@ -12,6 +12,7 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [apiResponse, setApiResponse] = useState('');
 
 
   interface FormData {
@@ -24,16 +25,11 @@ export default function SignUp() {
 
   
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     console.log("data", data)
-  }
-
-  const handleSignup = async (data: any) => {
-
-    // console.log("data", data)
-
     const headers = {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
       // 'Authorization': 'JWT fefege...'
     }
     const body = {
@@ -42,17 +38,19 @@ export default function SignUp() {
       password: password
     }
 
-    try {
-      // Make a POST request to your backend API to create a new user
-      // const response = await axios.post('http://127.0.0.1:8000/users/', body, {headers})
-      // console.log(response.data)
-      // router.push("/profile")
+    try { 
+      const response = await axios.post('http://127.0.0.1:8000/users/', body, { headers: headers })
+      console.log(response.data)
+      localStorage.setItem('usernameLoggedIn', "true")
+      localStorage.setItem('username', response?.data?.username)
+      router.push("/profile")
     } catch (error) {
+      setApiResponse("Looks like you already have an account. Go to Login")
       console.error('Signup failed:', error);
     }
-  };
+  }
 
-  console.log("ERRORS:", errors)
+  
 
     return (
       <div className="hero min-h-screen bg-base-200">
@@ -136,6 +134,7 @@ export default function SignUp() {
                   <label className="label">
                     <Link className="label-text-alt link link-hover" href="/login"> Already have an account?  Log in</Link>
                   </label>
+                  {apiResponse && <Link className="label-text-alt link link-hover" href="/login"> <span className="text-red-500 text-sm mt-2" role="alert">{apiResponse}</span></Link>}
                 </div>
                 <div className="form-control mt-6">
                   <input type='submit' className="btn btn-primary" value="Submit" />
