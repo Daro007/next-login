@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function SignUp() {
 
@@ -12,7 +13,24 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignup = async () => {
+
+  interface FormData {
+    username: string
+    email: string,
+    password: string
+  }
+
+  const { register, handleSubmit, watch, formState: { errors }, } = useForm<FormData>();
+
+  
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log("data", data)
+  }
+
+  const handleSignup = async (data: any) => {
+
+    // console.log("data", data)
 
     const headers = {
       'Content-Type': 'application/json',
@@ -26,13 +44,15 @@ export default function SignUp() {
 
     try {
       // Make a POST request to your backend API to create a new user
-      const response = await axios.post('http://127.0.0.1:8000/users/', body, {headers})
-      console.log(response.data)
-      router.push("/profile")
+      // const response = await axios.post('http://127.0.0.1:8000/users/', body, {headers})
+      // console.log(response.data)
+      // router.push("/profile")
     } catch (error) {
       console.error('Signup failed:', error);
     }
   };
+
+  console.log("ERRORS:", errors)
 
     return (
       <div className="hero min-h-screen bg-base-200">
@@ -45,50 +65,82 @@ export default function SignUp() {
               a id nisi.
             </p>
           </div>
+          
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Username</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="username"
-                  className="input input-bordered"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Email</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="email"
-                  className="input input-bordered"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="password"
-                  className="input input-bordered"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <label className="label">
-                  <Link className="label-text-alt link link-hover" href="/login"> Already have an account?  Log in</Link>
-                </label>
-              </div>
-              <div className="form-control mt-6">
-                <button onClick={handleSignup} className="btn btn-primary">Sign Up</button>
-              </div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="form-control">
+                  <label htmlFor="username" className="label">
+                    <span className="label-text">Username</span>
+                  </label>
+                  <input
+                    {...register("username", { required: "A username is required" })}
+                    name='username'
+                    type="text"
+                    placeholder="username"
+                    className="input input-bordered"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                  {errors.username && (
+                    <p className="text-red-500 text-sm mt-2">
+                      A username is required.
+                    </p>
+                  )}
+                </div>
+                <div className="form-control">
+                  <label htmlFor="email" className={`label ${errors.email ? "text-red-400" : "text-purple-400"}`} >
+                    <span className="label-text">Email</span>
+                  </label>
+                  <input
+                    {...register("email", {
+                      required: "Email address is required",
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Entered value does not match email format"
+                      }
+                    })}
+                    name='email'
+                    type="text"
+                    placeholder="email"
+                    className="input input-bordered"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-2">
+                      A valid email is required.
+                    </p>
+                  )}
+                </div>
+                <div className="form-control">
+                  <label htmlFor="password" className="label">
+                    <span className="label-text">Password</span>
+                  </label>
+                  <input
+                    {...register("password", {
+                      required: "required",
+                      minLength: {
+                        value: 5,
+                        message: "min length is 5"
+                      }
+                    })}
+                    name='password'
+                    type="password"
+                    placeholder="password"
+                    className="input input-bordered"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {errors.password && <span className="text-red-500 text-sm mt-2" role="alert">{errors.password.message}</span>}
+                  <label className="label">
+                    <Link className="label-text-alt link link-hover" href="/login"> Already have an account?  Log in</Link>
+                  </label>
+                </div>
+                <div className="form-control mt-6">
+                  <input type='submit' className="btn btn-primary" value="Submit" />
+                </div>
+              </form>
             </div>
           </div>
         </div>
