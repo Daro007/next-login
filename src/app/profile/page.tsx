@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FontSizeChanger from "../components/FontSizeChanger";
+import WelcomeMessage from "../components/WelcomeMessage";
+import LanguageSelector from "../components/LanguageSelector";
 
 export default function Profile() {
   const router = useRouter();
@@ -9,16 +11,32 @@ export default function Profile() {
 
   const [fontSize, setFontSize] = useState<number>(16);
 
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+
   const handleFontSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const newSize = parseInt(event.target.value);
+    localStorage.setItem("fontSize", newSize.toString());
+    // console.log("newSize", newSize);
     setFontSize(newSize);
+  };
+
+  const handleLanguageChange = (language: string) => {
+    // const language = language;
+    localStorage.setItem("selectedLanguage", language.toString());
+    console.log("language", language);
+    setSelectedLanguage(language);
   };
 
   useEffect(() => {
     const usernameLoggedIn = localStorage.getItem("usernameLoggedIn");
-    console.log("usernameLoggedIn", usernameLoggedIn);
+    const selectedLanguageFromStorage = localStorage.getItem("selectedLanguage");
+    const fontSizeFromStorage = parseInt(localStorage.getItem("fontSize")!)
+    setFontSize(fontSizeFromStorage);
+    setSelectedLanguage(selectedLanguageFromStorage!);
+    
+    // console.log("usernameLoggedIn", usernameLoggedIn);
     if (usernameLoggedIn === "false") {
       router.push("/");
     }
@@ -33,17 +51,19 @@ export default function Profile() {
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-lg">
-          <h1 className="mb-5 text-5xl font-bold" style={{ fontSize: `${fontSize}px` }}>Welcome {username} !</h1>
-          <p className="mb-5">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
-          </p>
+          <WelcomeMessage selectedLanguage={selectedLanguage} username={username} fontSize={fontSize} />
+          <LanguageSelector
+            languages={['en', 'fr', 'de']} 
+            selectedLanguage={selectedLanguage}
+            onSelectLanguage={handleLanguageChange}
+           />
+          <br />
           <FontSizeChanger
-            fontSizeOptions={[12, 16, 20]}
+            fontSizeOptions={[16, 20, 24]}
             selectedSize={fontSize}
             onChange={handleFontSizeChange}
           />
+          <br />
           <button type="submit" className="btn btn-error">
             Delete account{" "}
           </button>
