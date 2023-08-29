@@ -73,15 +73,6 @@ function Navbar() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/settings"
-                  aria-label="user settings"
-                  className="justify-between"
-                >
-                  Settings
-                </Link>
-              </li>
-              <li>
                 <button
                   onClick={() => handleLogOut()}
                   aria-label="user settings"

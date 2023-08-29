@@ -30,7 +30,6 @@ export default function SignUp() {
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
-      // 'Authorization': 'JWT fefege...'
     }
     const body = {
       username: username,
@@ -41,9 +40,7 @@ export default function SignUp() {
     try { 
       const response = await axios.post('http://127.0.0.1:8000/users/', body, { headers: headers })
       console.log(response.data)
-      localStorage.setItem('usernameLoggedIn', "true")
-      localStorage.setItem('username', response?.data?.username)
-      router.push("/profile")
+      router.push("/login")
     } catch (error) {
       setApiResponse("Looks like you already have an account. Go to Login")
       console.error('Signup failed:', error);
@@ -75,6 +72,7 @@ export default function SignUp() {
                     {...register("username", { required: "A username is required" })}
                     name='username'
                     type="text"
+                    autoComplete="username"
                     placeholder="username"
                     className="input input-bordered"
                     value={username}
@@ -98,6 +96,7 @@ export default function SignUp() {
                         message: "Entered value does not match email format"
                       }
                     })}
+                    autoComplete="email"
                     name='email'
                     type="text"
                     placeholder="email"
@@ -123,6 +122,7 @@ export default function SignUp() {
                         message: "min length is 5"
                       }
                     })}
+                    autoComplete="current-password"
                     name='password'
                     type="password"
                     placeholder="password"

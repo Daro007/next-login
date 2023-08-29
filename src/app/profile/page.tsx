@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 import FontSizeChanger from "../components/FontSizeChanger";
 import WelcomeMessage from "../components/WelcomeMessage";
 import LanguageSelector from "../components/LanguageSelector";
+import UsernameChanger from "../components/UsernameChanger";
+import DeleteUser from "../components/DeleteUser";
 
 export default function Profile() {
   const router = useRouter();
+
   const [username, setUsername] = useState<string>("Username");
-
   const [fontSize, setFontSize] = useState<number>(16);
-
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
 
   const handleFontSizeChange = (
@@ -23,21 +24,19 @@ export default function Profile() {
   };
 
   const handleLanguageChange = (language: string) => {
-    // const language = language;
     localStorage.setItem("selectedLanguage", language.toString());
-    console.log("language", language);
+    // console.log("language", language);
     setSelectedLanguage(language);
   };
 
   useEffect(() => {
-    const usernameLoggedIn = localStorage.getItem("usernameLoggedIn");
+    const token = localStorage.getItem("access_token");
     const selectedLanguageFromStorage = localStorage.getItem("selectedLanguage");
     const fontSizeFromStorage = parseInt(localStorage.getItem("fontSize")!)
     setFontSize(fontSizeFromStorage);
     setSelectedLanguage(selectedLanguageFromStorage!);
     
-    // console.log("usernameLoggedIn", usernameLoggedIn);
-    if (usernameLoggedIn === "false") {
+    if (!token) {
       router.push("/");
     }
     const username_from_storage = localStorage.getItem("username")
@@ -59,14 +58,14 @@ export default function Profile() {
            />
           <br />
           <FontSizeChanger
-            fontSizeOptions={[16, 20, 24]}
+            fontSizeOptions={[16, 20, 24, 28]}
             selectedSize={fontSize}
             onChange={handleFontSizeChange}
           />
           <br />
-          <button type="submit" className="btn btn-error">
-            Delete account{" "}
-          </button>
+          <UsernameChanger username={username} />
+          <br />
+          <DeleteUser username={username}/>
         </div>
       </div>
     </div>
