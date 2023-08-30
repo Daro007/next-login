@@ -1,13 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useUserContext } from "../context/UserContext";
 
-interface UsernameChangerProps {
-  username: string;
-}
 
-const UsernameChanger: React.FC<UsernameChangerProps> = ({ username }) => {
+const UsernameChanger: React.FC = () => {
   //   console.log("username PROP", username);
+
+  const router = useRouter();
+
+  const { user, logout } = useUserContext();
 
   const [apiResponse, setApiResponse] = useState("");
 
@@ -19,15 +22,20 @@ const UsernameChanger: React.FC<UsernameChangerProps> = ({ username }) => {
 
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/users/${username}/delete`,
+        `http://127.0.0.1:8000/users/${user}/delete`,
         {
           headers: headers,
         }
       );
       console.log(response.data);
+      logout()
+      localStorage.removeItem("selectedLanguage");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("fontSize");
+      router.push("/");
     } catch (error) {
       setApiResponse("Something went wrong. Try again later");
-      console.error("Log in failed:", error);
+      console.error("Delete user failed:", error);
     }
   };
   return (

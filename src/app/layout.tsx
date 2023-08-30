@@ -1,10 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { DefaultTemplateString } from "next/dist/lib/metadata/types/metadata-types";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import { UserProvider } from "./context/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,9 +34,11 @@ export default function RootLayout({
         />
       </Head>
       <body className={inter.className} data-theme="cupcake">
-        <Navbar />
-        {children}
-        <Footer />
+        <UserProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   );

@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
  
 export function middleware(request: NextRequest) {
+
+  // TODO: User CRUD to MongoDB
+
+  // TODO: Handle Login and private routes
+
   // console.log("Pathname:", request.nextUrl.pathname);
   // if (request.nextUrl.pathname === "/profile") {
   // Validate JWT token

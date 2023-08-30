@@ -1,29 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useUserContext } from "../context/UserContext";
+import placeholderImage from '../../images/account.png'
 
 function Navbar() {
   const router = useRouter();
 
-  const [loggedIn, setLoggedIn] = useState<string>(localStorage.getItem("usernameLoggedIn")!);
+  const { user, logout } = useUserContext();
+  // console.log("user from context", user);
 
   function handleLogOut() {
-    localStorage.setItem("usernameLoggedIn", "false");
+    logout()
     router.push("/");
   }
 
-  useEffect(() => {
-    const usernameLoggedIn = localStorage.getItem("usernameLoggedIn");
-
-    if (usernameLoggedIn === "true") {
-      setLoggedIn("true");
-    } else {
-      setLoggedIn("false");
-    }
-    
-  }, [loggedIn]);
 
   return (
     <div className="navbar bg-base-100">
@@ -36,7 +29,7 @@ function Navbar() {
           CompanyName
         </Link>
       </div>
-      <div className="flex-none">
+      {!user ? (<div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link href="/login">Log in</Link>
@@ -45,14 +38,16 @@ function Navbar() {
             <Link href="/sign-up">Sign up</Link>
           </li>
         </ul>
-      </div>
-      {loggedIn === "true" ? (
+      </div> ) : (
+        ""
+      )}
+      {user ? (
         <div className="flex-none gap-2">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <Image
-                  src="/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  src={placeholderImage}
                   alt="test"
                   fill={true}
                 />

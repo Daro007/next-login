@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useUserContext } from "../context/UserContext";
 
 export default function Login() {
   const router = useRouter();
@@ -11,6 +12,9 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [apiResponse, setApiResponse] = useState("");
+
+  const { login } = useUserContext();
+  // console.log("user from context", user);
 
   interface FormData {
     username: string;
@@ -43,6 +47,7 @@ export default function Login() {
       localStorage.setItem("usernameLoggedIn", "true");
       localStorage.setItem("username", response?.data?.username);
       localStorage.setItem("access_token", response?.data?.access_token);
+      login(response?.data?.username)
       router.push("/profile");
     } catch (error) {
       setApiResponse("Incorrect email or password");

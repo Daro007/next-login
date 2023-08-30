@@ -6,13 +6,16 @@ import WelcomeMessage from "../components/WelcomeMessage";
 import LanguageSelector from "../components/LanguageSelector";
 import UsernameChanger from "../components/UsernameChanger";
 import DeleteUser from "../components/DeleteUser";
+import { useUserContext } from "../context/UserContext";
 
 export default function Profile() {
   const router = useRouter();
 
-  const [username, setUsername] = useState<string>("Username");
+  // const [username, setUsername] = useState<string>("Username");
   const [fontSize, setFontSize] = useState<number>(16);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+
+  const { user, login } = useUserContext();
 
   const handleFontSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -33,16 +36,16 @@ export default function Profile() {
     const token = localStorage.getItem("access_token");
     const selectedLanguageFromStorage = localStorage.getItem("selectedLanguage");
     const fontSizeFromStorage = parseInt(localStorage.getItem("fontSize")!)
-    setFontSize(fontSizeFromStorage);
-    setSelectedLanguage(selectedLanguageFromStorage!);
+    setFontSize(fontSizeFromStorage || 16);
+    setSelectedLanguage(selectedLanguageFromStorage! || "en");
     
     if (!token) {
       router.push("/");
     }
-    const username_from_storage = localStorage.getItem("username")
-      ? (localStorage.getItem("username") as string)
-      : "";
-    setUsername(username_from_storage);
+    // const username_from_storage = localStorage.getItem("username")
+    //   ? (localStorage.getItem("username") as string)
+    //   : "";
+    // setUsername(username_from_storage);
   }, []);
 
   return (
@@ -50,7 +53,7 @@ export default function Profile() {
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-lg">
-          <WelcomeMessage selectedLanguage={selectedLanguage} username={username} fontSize={fontSize} />
+          <WelcomeMessage selectedLanguage={selectedLanguage} username={user!} fontSize={fontSize} />
           <LanguageSelector
             languages={['en', 'fr', 'de']} 
             selectedLanguage={selectedLanguage}
@@ -63,9 +66,9 @@ export default function Profile() {
             onChange={handleFontSizeChange}
           />
           <br />
-          <UsernameChanger username={username} />
+          <UsernameChanger />
           <br />
-          <DeleteUser username={username}/>
+          <DeleteUser username={user!}/>
         </div>
       </div>
     </div>

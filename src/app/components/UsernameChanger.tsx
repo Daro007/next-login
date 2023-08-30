@@ -2,12 +2,10 @@
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
+import { useUserContext } from "../context/UserContext";
 
-interface UsernameChangerProps {
-  username: string;
-}
 
-const UsernameChanger: React.FC<UsernameChangerProps> = ({username}) => {
+const UsernameChanger: React.FC = () => {
 
   interface FormData {
     newUsername: string;
@@ -15,6 +13,8 @@ const UsernameChanger: React.FC<UsernameChangerProps> = ({username}) => {
 
   const [newUsername, setNewUsername] = useState("");
   const [apiResponse, setApiResponse] = useState("");
+
+  const { user, login } = useUserContext();
 
   const {
     register,
@@ -30,7 +30,7 @@ const UsernameChanger: React.FC<UsernameChangerProps> = ({username}) => {
       "Access-Control-Allow-Origin": "*",
     };
     const body = {
-      username: username,
+      username: user,
       new_username: newUsername,
     };
 
@@ -38,14 +38,15 @@ const UsernameChanger: React.FC<UsernameChangerProps> = ({username}) => {
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/users/${username}/modify-username/?new_username=${newUsername}`,
+        `http://127.0.0.1:8000/users/${user}/modify-username/?new_username=${newUsername}`,
         body,
         {
           headers: headers,
         }
       );
       console.log(response.data);
-      localStorage.setItem("username", response?.data?.username);
+      login(response?.data?.new_username)
+      localStorage.setItem("username", response?.data?.new_username);
     } catch (error) {
       setApiResponse("Incorrect email or password");
       console.error("Log in failed:", error);
