@@ -7,6 +7,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function SignUp() {
 
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  // console.log("apiUrl: " + apiUrl);
+
   const router = useRouter()
 
   const [username, setUsername] = useState('');
@@ -38,7 +41,7 @@ export default function SignUp() {
     }
 
     try { 
-      const response = await axios.post('http://127.0.0.1:8000/users/', body, { headers: headers })
+      const response = await axios.post(`${apiUrl}users/`, body, { headers: headers })
       console.log(response.data)
       router.push("/login")
     } catch (error) {

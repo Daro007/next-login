@@ -7,6 +7,8 @@ import { useUserContext } from "../context/UserContext";
 
 const UsernameChanger: React.FC = () => {
 
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   interface FormData {
     newUsername: string;
   }
@@ -38,7 +40,7 @@ const UsernameChanger: React.FC = () => {
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/users/${user}/modify-username/?new_username=${newUsername}`,
+        `${apiUrl}users/${user}/modify-username/?new_username=${newUsername}`,
         body,
         {
           headers: headers,

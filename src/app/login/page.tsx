@@ -7,6 +7,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useUserContext } from "../context/UserContext";
 
 export default function Login() {
+
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const router = useRouter();
 
   const [username, setUsername] = useState("");
@@ -40,7 +43,7 @@ export default function Login() {
     };
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/auth/token/", body, {
+      const response = await axios.post(`${apiUrl}auth/token/`, body, {
         headers: headers,
       });
       console.log("Login data",response.data);

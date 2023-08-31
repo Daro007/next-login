@@ -8,6 +8,8 @@ import { useUserContext } from "../context/UserContext";
 const UsernameChanger: React.FC = () => {
   //   console.log("username PROP", username);
 
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const router = useRouter();
 
   const { user, logout } = useUserContext();
@@ -22,7 +24,7 @@ const UsernameChanger: React.FC = () => {
 
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/users/${user}/delete`,
+        `${apiUrl}users/${user}/delete`,
         {
           headers: headers,
         }
