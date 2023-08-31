@@ -9,7 +9,7 @@ interface LanguageSelectorProps {
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ languages, selectedLanguage, onSelectLanguage }) => {
   return (
     <div>
-      <label>Select your greeting's language: </label>
+      <label>Select your greeting´s language: </label>
       <select value={selectedLanguage} onChange={(e) => onSelectLanguage(e.target.value)}>
         {languages.map(language => (
           <option key={language} value={language}>

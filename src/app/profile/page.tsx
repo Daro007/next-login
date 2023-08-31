@@ -68,7 +68,7 @@ export default function Profile() {
           <br />
           <UsernameChanger />
           <br />
-          <DeleteUser username={user!}/>
+          <DeleteUser />
         </div>
       </div>
     </div>

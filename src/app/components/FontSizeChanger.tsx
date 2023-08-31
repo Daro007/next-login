@@ -9,7 +9,7 @@ interface FontSizeChangerProps {
 const FontSizeChanger: React.FC<FontSizeChangerProps> = ({ fontSizeOptions, selectedSize, onChange }) => {
   return (
     <div>
-      <label>Select your greeting's font size: </label>
+      <label>Select your greeting´s font size: </label>
       <select value={selectedSize} onChange={onChange}>
         {fontSizeOptions.map(size => (
           <option key={size} value={size}>{size}px</option>
