@@ -40,7 +40,7 @@ const UsernameChanger: React.FC = () => {
 
     try {
       const response = await axios.put(
-        `${apiUrl}users/${user}/modify-username/?new_username=${newUsername}`,
+        `${apiUrl}users/${user}/?new_username=${newUsername}`,
         body,
         {
           headers: headers,

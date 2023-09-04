@@ -24,7 +24,7 @@ const UsernameChanger: React.FC = () => {
 
     try {
       const response = await axios.delete(
-        `${apiUrl}users/${user}/delete`,
+        `${apiUrl}users/${user}/`,
         {
           headers: headers,
         }
