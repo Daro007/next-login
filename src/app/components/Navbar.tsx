@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "../context/UserContext";
-import placeholderImage from '../../images/account.png'
 
 function Navbar() {
   const router = useRouter();
@@ -47,7 +46,7 @@ function Navbar() {
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <Image
-                  src={placeholderImage}
+                  src="/account.png"
                   alt="test"
                   fill={true}
                 />
